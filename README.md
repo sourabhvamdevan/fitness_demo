@@ -1,4 +1,4 @@
-# fitness_flutter
+# fitness_app
 
 A new Flutter project.
 
