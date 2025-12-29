@@ -1,41 +1,33 @@
 import 'package:flutter/material.dart';
-import '../constants/colors.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
-class AppTheme {
-  static ThemeData lightTheme = ThemeData(
-    useMaterial3: true,
-    scaffoldBackgroundColor: AppColors.background,
+import 'firebase_options.dart';
+import 'core/theme/app_theme.dart';
+import 'providers/workout_provider.dart';
+import 'screens/home/home_screen.dart';
 
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      primary: AppColors.primary,
-      secondary: AppColors.secondary,
-      error: AppColors.error,
-      background: AppColors.background,
-    ),
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.primary,
-      foregroundColor: Colors.white,
-      centerTitle: true,
-      elevation: 0,
-    ),
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-    cardTheme: CardTheme(
-      color: AppColors.cardBackground,
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    ),
+  runApp(const FitnessApp());
+}
 
-    textTheme: const TextTheme(
-      titleLarge: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
+class FitnessApp extends StatelessWidget {
+  const FitnessApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => WorkoutProvider())],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Fitness App',
+        theme: AppTheme.lightTheme,
+        home: const HomeScreen(),
       ),
-      bodyMedium: TextStyle(fontSize: 14, color: AppColors.textSecondary),
-    ),
-
-    iconTheme: const IconThemeData(color: AppColors.icon),
-  );
+    );
+  }
 }
